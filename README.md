@@ -17,9 +17,18 @@ zip -F benchmarks.zip --out single-benchmark.zip && unzip single-benchmark.zip &
 
 ### 3. Environemnt setup
 
+To set up the Python environment for the first time, run the following commands.
+
+```
+$ python -m venv venv
+$ source venv/bin/activate
+$ pip install scons
+```
+
 Everytime you want to build or run zsim, you need to setup the environment variables first.
 
 ```
+$ source venv/bin/activate
 $ source setup_env
 ```
 
@@ -29,6 +38,8 @@ $ source setup_env
 $ cd zsim
 $ scons -j4
 ```
+
+You need to compile the code each time you make a change.
 
 ##### 5. Launch a test to run
 

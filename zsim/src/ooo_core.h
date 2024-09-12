@@ -423,7 +423,7 @@ class OOOCore : public Core {
         uint64_t decodeCycle;
         CycleQueue<28> uopQueue;  // models issue queue
 
-        uint64_t instrs, uops, bbls, approxInstrs, mispredBranches, condBranches;
+        uint64_t instrs, uops, bbls, approxInstrs, mispredBranches;
 
 #ifdef OOO_STALL_STATS
         Counter profFetchStalls, profDecodeStalls, profIssueStalls;
@@ -483,7 +483,8 @@ class OOOCore : public Core {
 
         // Predicated loads and stores call this function, gets recorded as a 0-cycle op.
         // Predication is rare enough that we don't need to model it perfectly to be accurate (i.e. the uops still execute, retire, etc), but this is needed for correctness.
-        inline void predFalseMemOp();
+        inline void predFalseLoad();
+        inline void predFalseStore();
 
         inline void branch(Address pc, bool taken, Address takenNpc, Address notTakenNpc);
 

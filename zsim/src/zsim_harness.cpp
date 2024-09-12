@@ -218,7 +218,7 @@ static void printHeartbeat(GlobSimInfo* zinfo) {
     pathStr += "/";
     const char* hbFile = gm_strdup((pathStr + "heartbeat").c_str());
     std::ofstream hb(hbFile);
-    //std::ofstream hb("heartbeat");
+//    std::ofstream hb("heartbeat");
     hb << "Running on: " << hostname << std::endl;
     hb << "Start time: " << ctime_r(&startTime, time);
     hb << "Heartbeat time: " << ctime_r(&curTime, time);
@@ -244,10 +244,8 @@ void LaunchProcess(uint32_t procIdx) {
         // Set the child's vars and get the command
         // NOTE: We set the vars first so that, when parsing the command, wordexp takes those vars into account
         pinCmd->setEnvVars(procIdx);
-        //const char* inputFile;
-        //g_vector<g_string> args = pinCmd->getFullCmdArgs(procIdx, &inputFile);
-        g_string inputFile;
-        g_vector<g_string> args = pinCmd->getFullCmdArgs(procIdx, inputFile);
+        const char* inputFile;
+        g_vector<g_string> args = pinCmd->getFullCmdArgs(procIdx, &inputFile);
 
         //Copy args to a const char* [] for exec
         int nargs = args.size()+1;
@@ -272,11 +270,11 @@ void LaunchProcess(uint32_t procIdx) {
         }
 
         //Input redirection if needed
-        if (!inputFile.empty()) {
-            int fd = open(inputFile.c_str(), O_RDONLY);
+        if (inputFile) {
+            int fd = open(inputFile, O_RDONLY);
             if (fd == -1) {
                 perror("open() failed");
-                panic("Could not open input redirection file %s", inputFile.c_str());
+                panic("Could not open input redirection file %s", inputFile);
             }
             dup2(fd, 0);
         }

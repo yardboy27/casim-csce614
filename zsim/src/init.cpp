@@ -54,7 +54,6 @@
 #include "null_core.h"
 #include "ooo_core.h"
 #include "part_repl_policies.h"
-#include "rrip_repl.h"
 #include "pin_cmd.h"
 #include "prefetcher.h"
 #include "proc_stats.h"
@@ -165,12 +164,6 @@ BaseCache* BuildCacheBank(Config& config, const string& prefix, g_string& name, 
         rp = new NRUReplPolicy(numLines, candidates);
     } else if (replType == "Rand") {
         rp = new RandReplPolicy(candidates);
-    } else if (replType == "SRRIP") {
-        // max value of RRPV, you need to pass it to your SRRIP constructor
-        uint32_t rpvMax = config.get<bool>(prefix + "repl.rpvMax", 3);
-        assert(isPow2(rpvMax + 1));
-        // add your SRRIP construction code here
-
     } else if (replType == "WayPart" || replType == "Vantage" || replType == "IdealLRUPart") {
         if (replType == "WayPart" && arrayType != "SetAssoc") panic("WayPart replacement requires SetAssoc array");
 
@@ -869,7 +862,7 @@ static void InitGlobalStats() {
 
 void SimInit(const char* configFile, const char* outputDir, uint32_t shmid) {
     zinfo = gm_calloc<GlobSimInfo>();
-    //zinfo->outputDir = gm_strdup(outputDir);
+    zinfo->outputDir = gm_strdup(outputDir);
     zinfo->statsBackends = new g_vector<StatsBackend*>();
 
     Config config(configFile);
