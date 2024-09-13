@@ -423,7 +423,7 @@ class OOOCore : public Core {
         uint64_t decodeCycle;
         CycleQueue<28> uopQueue;  // models issue queue
 
-        uint64_t instrs, uops, bbls, approxInstrs, mispredBranches;
+        uint64_t instrs, uops, bbls, approxInstrs, mispredBranches, condBranches;
 
 #ifdef OOO_STALL_STATS
         Counter profFetchStalls, profDecodeStalls, profIssueStalls;

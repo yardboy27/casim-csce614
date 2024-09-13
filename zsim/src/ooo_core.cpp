@@ -71,7 +71,7 @@ OOOCore::OOOCore(FilterCache* _l1i, FilterCache* _l1d, g_string& _name) : Core(_
     curCycleIssuedUops = 0;
     branchPc = 0;
 
-    instrs = uops = bbls = approxInstrs = mispredBranches = 0;
+    instrs = uops = bbls = approxInstrs = mispredBranches = condBranches = 0;
 
     for (uint32_t i = 0; i < FWD_ENTRIES; i++) fwdArray[i].set((Address)(-1L), 0);
 }
@@ -98,6 +98,8 @@ void OOOCore::initStats(AggregateStat* parentStat) {
     approxInstrsStat->init("approxInstrs", "Instrs with approx uop decoding", &approxInstrs);
     ProxyStat* mispredBranchesStat = new ProxyStat();
     mispredBranchesStat->init("mispredBranches", "Mispredicted branches", &mispredBranches);
+    ProxyStat* condBranchesStat = new ProxyStat();
+    condBranchesStat->init("condBranches", "conditional branches", &condBranches);
 
     coreStat->append(cyclesStat);
     coreStat->append(cCyclesStat);
@@ -106,6 +108,7 @@ void OOOCore::initStats(AggregateStat* parentStat) {
     coreStat->append(bblsStat);
     coreStat->append(approxInstrsStat);
     coreStat->append(mispredBranchesStat);
+    coreStat->append(condBranchesStat);
 
 #ifdef OOO_STALL_STATS
     profFetchStalls.init("fetchStalls",  "Fetch stalls");  coreStat->append(&profFetchStalls);
@@ -377,6 +380,7 @@ inline void OOOCore::bbl(Address bblAddr, BblInfo* bblInfo) {
     uint32_t lineSize = 1 << lineBits;
 
     // Simulate branch prediction
+    if (branchPc) condBranches++;
     if (branchPc && !branchPred.predict(branchPc, branchTaken)) {
         mispredBranches++;
 
