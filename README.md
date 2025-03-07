@@ -34,12 +34,6 @@ $ scons -j4
 
 You need to compile the code each time you make a change.
 
-##### 4. Launch a test to run
-
-```
-./build/opt/zsim tests/simple.cfg
-```
-
 
 
 ###### For more information, check `zsim/README.md`
