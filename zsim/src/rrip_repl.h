@@ -7,14 +7,14 @@
 class SRRIPReplPolicy : public ReplPolicy {
     protected:
         // add class member variables here
-        uint8_t maxRPV;
-        uint8_t* array;
+        int8_t maxRPV;
+        int8_t* array;
         uint32_t numLines;
 
     public:
         // add member methods here, refer to repl_policies.h
-        explicit SRRIPReplPolicy(uint8_t _maxRPV, uint32_t _numLines) : maxRPV(_maxRPV), numLines(_numLines) {
-            array = gm_calloc<uint8_t>(numLines);
+        explicit SRRIPReplPolicy(int8_t _maxRPV, uint32_t _numLines) : maxRPV(_maxRPV), numLines(_numLines) {
+            array = gm_calloc<int8_t>(numLines);
 
             // initialize all invalid entries to max rpv
             for (uint32_t i = 0; i < numLines; ++i) {
@@ -27,7 +27,6 @@ class SRRIPReplPolicy : public ReplPolicy {
         }
 
         void increment_all() { // increment the RRPV for all the array items by 1
-            // TODO 
             for (uint32_t i = 0; i < numLines; ++i)
             {
                 if (array[i] < maxRPV)
@@ -36,14 +35,23 @@ class SRRIPReplPolicy : public ReplPolicy {
         }
 
         void update(uint32_t id, const MemReq* req) { // sets the RRPV value to zero on cache hit
-            array[id] = 0;
+            // replaced() function sets the RRPV value to -1 so that we can tell
+            // when we are updating after a cache hit or cache miss
+            if (array[id] == -1) // if recently replaced, then set RRPV to 2^M - 2 (M = RRPV bits)
+                array[id] = 2;
+            else // if it is a hit, then we set RRPV value to zero
+                array[id] = 0;
+        }
+
+        void replaced(uint32_t id) {
+            array[id] = -1;
         }
 
         template <typename C> inline uint32_t rank(const MemReq* req, C cands) {
             uint32_t bestCand = -1;
-            uint8_t bestScore = 0;
+            int8_t bestScore = 0;
             for (auto ci = cands.begin(); ci != cands.end(); ci.inc()) {
-                uint8_t s = score(*ci);
+                int8_t s = score(*ci);
 
                 if (s >= bestScore) {
                     bestCand = *ci;
@@ -55,15 +63,15 @@ class SRRIPReplPolicy : public ReplPolicy {
             }
 
             // if bestScore < maxRPV, increment all the RPV values
-            increment_all()
+            this->increment_all();
             return rank(req, cands);
         }
 
         // DECL_RANK_BINDINGS;
 
     private:
-        inline uint8_t score(uint32_t id) {
-            return ( array[id] )
+        inline int8_t score(uint32_t id) {
+            return ( array[id] );
         }
 };
 #endif // RRIP_REPL_H_
