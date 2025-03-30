@@ -67,7 +67,7 @@ class SRRIPReplPolicy : public ReplPolicy {
             return rank(req, cands);
         }
 
-        // DECL_RANK_BINDINGS;
+        DECL_RANK_BINDINGS;
 
     private:
         inline int8_t score(uint32_t id) {
