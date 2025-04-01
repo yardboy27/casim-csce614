@@ -2,7 +2,7 @@
 Computer Architecture Simulation Infrastructure for CSCE 614 Computer Architecture
 
 
-##### 1. Unzip benchmarks files
+### 1. Unzip benchmarks files
 
 ```
 zip -F benchmarks.zip --out single-benchmark.zip && unzip single-benchmark.zip && mkdir benchmarks/parsec-2.1/inputs/streamcluster
