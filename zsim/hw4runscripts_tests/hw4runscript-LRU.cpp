@@ -18,7 +18,7 @@ int main(void) {
         int pid = fork();
         
         if (pid == 0) {
-            char* args[] = {const_cast<char*>("./hw4runscript"), const_cast<char*>(PARSEC_benchmarks[i]), const_cast<char*>("LRU"), NULL};
+            char* args[] = {const_cast<char*>("./hw4runscript"), const_cast<char*>("PARSEC"), const_cast<char*>(PARSEC_benchmarks[i]), const_cast<char*>("LRU"), NULL};
             execvp(args[0], args);
         }
         
@@ -32,7 +32,7 @@ int main(void) {
         int pid = fork();
         
         if (pid == 0) {
-            char* args[] = {const_cast<char*>("./hw4runscript"), const_cast<char*>(SPEC_benchmarks[i]), const_cast<char*>("LRU"), NULL};
+            char* args[] = {const_cast<char*>("./hw4runscript"), const_cast<char*>("SPEC"), const_cast<char*>(SPEC_benchmarks[i]), const_cast<char*>("LRU"), NULL};
             execvp(args[0], args);
         }
         
@@ -41,37 +41,6 @@ int main(void) {
         printf("Benchmark: %s (LRU) is complete.\n", SPEC_benchmarks[i]);
     }
     printf("--------------- FINISHED all LRU child processes ---------------\n\n");
-
-    // Run LFU benchmarks
-    printf("--------------- Starting LFU child processes -----------------\n");
-    for (int i = 0; i < num_PARSEC_benchmarks; ++i) {
-        int child_status;
-        int pid = fork();
-        
-        if (pid == 0) {
-            char* args[] = {const_cast<char*>("./hw4runscript"), const_cast<char*>(PARSEC_benchmarks[i]), const_cast<char*>("LFU"), NULL};
-            execvp(args[0], args);
-        }
-        
-        printf("Waiting on benchmark: %s (LFU)\n", PARSEC_benchmarks[i]);
-        wait(&child_status);
-        printf("Benchmark: %s (LFU) is complete.\n", PARSEC_benchmarks[i]);
-    }
-
-    for (int i = 0; i < num_SPEC_benchmarks; ++i) {
-        int child_status;
-        int pid = fork();
-        
-        if (pid == 0) {
-            char* args[] = {const_cast<char*>("./hw4runscript"), const_cast<char*>(SPEC_benchmarks[i]), const_cast<char*>("LFU"), NULL};
-            execvp(args[0], args);
-        }
-        
-        printf("Waiting on benchmark: %s (LFU)\n", SPEC_benchmarks[i]);
-        wait(&child_status);
-        printf("Benchmark: %s (LFU) is complete.\n", SPEC_benchmarks[i]);
-    }
-    printf("--------------- FINISHED all LFU child processes ---------------\n\n");
 
     return 0;
 }

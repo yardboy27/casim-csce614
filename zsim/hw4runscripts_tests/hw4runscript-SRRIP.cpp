@@ -11,20 +11,20 @@ int main(void) {
     int num_PARSEC_benchmarks = sizeof(PARSEC_benchmarks) / sizeof(PARSEC_benchmarks[0]);
     int num_SPEC_benchmarks = sizeof(SPEC_benchmarks) / sizeof(SPEC_benchmarks[0]);
 
-    // Run LFU benchmarks
-    printf("--------------- Starting LFU child processes -----------------\n");
+    // Run LRU benchmarks
+    printf("--------------- Starting SRRIP child processes -----------------\n");
     for (int i = 0; i < num_PARSEC_benchmarks; ++i) {
         int child_status;
         int pid = fork();
         
         if (pid == 0) {
-            char* args[] = {const_cast<char*>("./hw4runscript"), const_cast<char*>(PARSEC_benchmarks[i]), const_cast<char*>("LFU"), NULL};
+            char* args[] = {const_cast<char*>("./hw4runscript"), const_cast<char*>("PARSEC"), const_cast<char*>(PARSEC_benchmarks[i]), const_cast<char*>("SRRIP"), NULL};
             execvp(args[0], args);
         }
         
-        printf("Waiting on benchmark: %s (LFU)\n", PARSEC_benchmarks[i]);
+        printf("Waiting on benchmark: %s (SRRIP)\n", PARSEC_benchmarks[i]);
         wait(&child_status);
-        printf("Benchmark: %s (LFU) is complete.\n", PARSEC_benchmarks[i]);
+        printf("Benchmark: %s (SRRIP) is complete.\n", PARSEC_benchmarks[i]);
     }
 
     for (int i = 0; i < num_SPEC_benchmarks; ++i) {
@@ -32,15 +32,16 @@ int main(void) {
         int pid = fork();
         
         if (pid == 0) {
-            char* args[] = {const_cast<char*>("./hw4runscript"), const_cast<char*>(SPEC_benchmarks[i]), const_cast<char*>("LFU"), NULL};
+            char* args[] = {const_cast<char*>("./hw4runscript"), const_cast<char*>("SPEC"), const_cast<char*>(SPEC_benchmarks[i]), const_cast<char*>("SRRIP"), NULL};
             execvp(args[0], args);
         }
         
-        printf("Waiting on benchmark: %s (LFU)\n", SPEC_benchmarks[i]);
+        printf("Waiting on benchmark: %s (SRRIP)\n", SPEC_benchmarks[i]);
         wait(&child_status);
-        printf("Benchmark: %s (LFU) is complete.\n", SPEC_benchmarks[i]);
+        printf("Benchmark: %s (SRRIP) is complete.\n", SPEC_benchmarks[i]);
     }
-    printf("--------------- FINISHED all LFU child processes ---------------\n\n");
+    printf("--------------- FINISHED all SRRIP child processes ---------------\n\n");
+
 
     return 0;
 }
