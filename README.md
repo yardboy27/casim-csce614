@@ -46,10 +46,14 @@ hw4runscript-SRRIP.cpp
 It is highly recommended that you execute these `.cpp` programs on a background session using `tmux`. With `tmux`, the executable will still run even if your session is disconnected. More information about how to create a `tmux` session can be found online.
 
 Compile one of these files by running the following command:
-`g++ -o hw4runscript-<config>.o hw4runscript-<config>.cpp`
+```
+$ g++ -o hw4runscript-<config>.o hw4runscript-<config>.cpp
+```
 
 Then, run the program:
-`./hw4runscript-<config>.o`
+```
+$ ./hw4runscript-<config>.o
+```
 
 
 
