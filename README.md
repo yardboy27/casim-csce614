@@ -46,10 +46,10 @@ $ ./hw4runscript <suite> <benchmark> <repl_policy> &
 ```
 where
 ```
-    (suite) benchmarks: 
-        -- (SPEC) bzip2 gcc mcf hmmer sjeng libquantum xalancbmk milc cactusADM leslie3d namd soplex calculix lbm
-        -- (PARSEC) blackscholes bodytrack canneal dedup fluidanimate freqmine streamcluster swaptions x264
-    repl_policy: LRU LFU SRRIP
+(suite) benchmarks: 
+    -- (SPEC) bzip2 gcc mcf hmmer sjeng libquantum xalancbmk milc cactusADM leslie3d namd soplex calculix lbm
+    -- (PARSEC) blackscholes bodytrack canneal dedup fluidanimate freqmine streamcluster swaptions x264
+repl_policy: LRU LFU SRRIP
 ```
 The `&` is used so that the script can be run as a background process and you can continue to use the terminal. However, it is recommended to use `tmux`, a terminal multiplexer, to run the benchmarks. More details are below in 4c.
 
@@ -62,8 +62,8 @@ $ ./hw4runpolicy.o -r <repl_policy> [-n <max_running_processes>] &
 ```
 where
 ```
-    repl_policy: LRU LFU SRRIP
-    (optional) max_running_processes: >= 1 (set to 1 by default)
+repl_policy: LRU LFU SRRIP
+(optional) max_running_processes: >= 1 (set to 1 by default)
 ```
 Once again, the `&` is used so the script can be run as a background process. 
 
@@ -75,7 +75,7 @@ It is recommended that you use `tmux`, a terminal multiplexer, to run the benchm
 
 Examples of how you would use `tmux` for running both the `hw4runscript` and the `hw4runpolicy.cpp` are shown below. Keep in mind that the naming conventions used in the examples are optional; however, make sure you don't recompile and accidentally overwrite an existing executable that is running.
 
-##### hw4runpolicy.cpp with tmux
+##### hw4runscript with tmux
 ```
 $ tmux new -s run_<repl_policy>_<benchmark>
 $ ./hw4runscript <suite> <benchmark> <repl_policy> &
